@@ -65,3 +65,6 @@ if (process.env.NODE_ENVV === "production") {
 export const prismaClient = prisma;
 ```
 
+## Screenshots tabelas
+
+![App Screenshot](Screenshots/tabelas.png)
