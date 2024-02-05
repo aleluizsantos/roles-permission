@@ -20,20 +20,20 @@ model Users {
 }
 
 model Permissions {
-  id             String             @id @default(uuid())
-  namePer        String
-  descriptionPer String
-  createAt       DateTime           @default(now())
-  roles          Permission_roles[]
+  id          String             @id @default(uuid())
+  type        String
+  description String
+  createAt    DateTime           @default(now())
+  roles       Permission_roles[]
 }
 
 model Roles {
-  id             String             @id @default(uuid())
-  nameRol        String
-  descriptionRol String
-  createAt       DateTime           @default(now())
-  permission     Permission_roles[]
-  users_roles    Users_roles[]
+  id          String             @id @default(uuid())
+  type        String
+  description String
+  createAt    DateTime           @default(now())
+  permission  Permission_roles[]
+  users_roles Users_roles[]
 }
 
 model Permission_roles {

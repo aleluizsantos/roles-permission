@@ -20,11 +20,11 @@ async function decoder(request: Request) {
         select: {
           role: {
             select: {
-              nameRol: true,
-              descriptionRol: true,
+              type: true,
+              description: true,
               permission: {
                 select: {
-                  permission: { select: { id: true, namePer: true } },
+                  permission: { select: { id: true, type: true } },
                 },
               },
             },
@@ -49,9 +49,9 @@ function is(roles: String[], permissions: String[]): RequestHandler {
     const { users_roles } = user;
     const [roles_permision] = users_roles.map((userRoles) => {
       const roles: string[] = [];
-      roles.push(userRoles.role.nameRol);
+      roles.push(userRoles.role.type);
       const permission = userRoles.role.permission.map(
-        (per) => per.permission.namePer
+        (per) => per.permission.type
       );
       return { roles, permission };
     });

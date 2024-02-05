@@ -17,14 +17,12 @@ router.get("/user", userController.show);
 router.post("/session", sessionController.create);
 
 // PERMISSION
-router.post(
-  "/permissions",
-  is(["ROLE_ADMIN"], ["CREATE"]),
-  permissionController.create
-);
+router.post("/permissions", permissionController.create);
+router.get("/permissions", permissionController.show);
 
 // ROLES
-router.post("/roles", is(["ROLE_ADMIN"], ["CREATE"]), rolesController.create);
+router.post("/roles", rolesController.create);
+router.get("/roles", rolesController.show);
 
 //PRODUTOS
 router.post("/product", productController.create);

@@ -1,17 +1,22 @@
 import { Request, Response } from "express";
 import { prismaClient } from "../../lib/prisma";
-import { typeRoles } from "../schemas/schemaRoles";
+import { schemaRoles, typeRoles } from "../schemas/schemaRoles";
 
 export default {
   async create(request: Request, response: Response) {
-    const { nameRol, descriptionRol, permissions } = request.body as typeRoles;
+    const { type, description, permissions } = request.body as typeRoles;
+
+    const validate = schemaRoles.safeParse(request.body);
+
+    if (!validate.success) return response.status(400).json(validate);
+
     //Verificar se a permission existe
     const existRoles = await prismaClient.roles.findFirst({
-      where: { nameRol },
+      where: { type },
     });
 
     if (existRoles)
-      return response.status(400).json({ message: "Erro roles já existe." });
+      return response.status(400).json({ message: "Esta role já existe." });
 
     // Pegar todas as permissões pelo id
     const existsPermissions = await prismaClient.permissions.findMany({
@@ -24,21 +29,36 @@ export default {
 
     const roles = await prismaClient.roles.create({
       data: {
-        nameRol,
-        descriptionRol,
+        type,
+        description,
         permission: {
           create: onlyId,
         },
       },
       select: {
-        nameRol: true,
-        descriptionRol: true,
+        type: true,
+        description: true,
         permission: {
-          select: { permission: { select: { descriptionPer: true } } },
+          select: { permission: { select: { description: true } } },
         },
       },
     });
 
+    return response.json(roles);
+  },
+  async show(request: Request, response: Response) {
+    const roles = await prismaClient.roles.findMany({
+      select: {
+        id: true,
+        type: true,
+        description: true,
+        permission: {
+          select: {
+            permission: true,
+          },
+        },
+      },
+    });
     return response.json(roles);
   },
 };

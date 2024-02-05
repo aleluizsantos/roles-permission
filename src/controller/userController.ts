@@ -63,10 +63,10 @@ export default {
           select: {
             role: {
               select: {
-                nameRol: true,
+                type: true,
                 permission: {
                   select: {
-                    permission: { select: { id: true, namePer: true } },
+                    permission: { select: { id: true, type: true } },
                   },
                 },
                 _count: true,

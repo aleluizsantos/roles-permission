@@ -12,8 +12,8 @@ CREATE TABLE "Users" (
 -- CreateTable
 CREATE TABLE "Permissions" (
     "id" TEXT NOT NULL,
-    "namePer" TEXT NOT NULL,
-    "descriptionPer" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
     "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Permissions_pkey" PRIMARY KEY ("id")
@@ -22,8 +22,8 @@ CREATE TABLE "Permissions" (
 -- CreateTable
 CREATE TABLE "Roles" (
     "id" TEXT NOT NULL,
-    "nameRol" TEXT NOT NULL,
-    "descriptionRol" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
     "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Roles_pkey" PRIMARY KEY ("id")
@@ -43,6 +43,15 @@ CREATE TABLE "Users_roles" (
     "user_id" TEXT NOT NULL,
 
     CONSTRAINT "Users_roles_pkey" PRIMARY KEY ("role_id","user_id")
+);
+
+-- CreateTable
+CREATE TABLE "Product" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+
+    CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex

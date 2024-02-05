@@ -1,13 +1,21 @@
+import {
+  schemaPermission,
+  typePermission,
+} from "./../schemas/schemaPermission";
 import { Request, Response } from "express";
-import { typePermission } from "../schemas/schemaPermission";
 import { prismaClient } from "../../lib/prisma";
 
 export default {
   async create(request: Request, response: Response) {
-    const { namePer, descriptionPer } = request.body as typePermission;
+    const { type, description } = request.body as typePermission;
+
+    const validate = schemaPermission.safeParse(request.body);
+
+    if (!validate.success) return response.status(400).json(validate);
+
     //Verificar se a permission existe
     const existPermission = await prismaClient.permissions.findFirst({
-      where: { namePer },
+      where: { type },
     });
 
     if (existPermission)
@@ -17,11 +25,15 @@ export default {
 
     const permission = await prismaClient.permissions.create({
       data: {
-        namePer,
-        descriptionPer,
+        type,
+        description,
       },
     });
 
+    return response.json(permission);
+  },
+  async show(request: Request, response: Response) {
+    const permission = await prismaClient.permissions.findMany();
     return response.json(permission);
   },
 };
