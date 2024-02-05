@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id          String        @id @default(uuid())
+  name        String
+  username    String        @unique
+  password    String
+  createAt    DateTime      @default(now())
+  users_roles Users_roles[]
+}
+
+model Permissions {
+  id             String             @id @default(uuid())
+  namePer        String
+  descriptionPer String
+  createAt       DateTime           @default(now())
+  roles          Permission_roles[]
+}
+
+model Roles {
+  id             String             @id @default(uuid())
+  nameRol        String
+  descriptionRol String
+  createAt       DateTime           @default(now())
+  permission     Permission_roles[]
+  users_roles    Users_roles[]
+}
+
+model Permission_roles {
+  role          Roles       @relation(fields: [role_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  role_id       String
+  permission    Permissions @relation(fields: [permission_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  permission_id String
+
+  @@id([role_id, permission_id])
+}
+
+model Users_roles {
+  role    Roles  @relation(fields: [role_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  role_id String
+  user    Users  @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id String
+
+  @@id([role_id, user_id])
+}
+
+model Product {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+}
